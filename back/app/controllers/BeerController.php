@@ -10,7 +10,7 @@ class BeerController extends \BaseController {
 	public function index()
 	{
 		$authId = Auth::user()->id;
-		$beers = Beer::where(function($query) use($authId) {
+		$beers = Beer::with('userFrom')->with('userTo')->where(function($query) use($authId) {
 			$query->where('user_from_id', '=', $authId)
 				  ->orWhere('user_to_id', '=', $authId);
 		})->get();
@@ -80,7 +80,7 @@ class BeerController extends \BaseController {
 	 */
 	public function show($id)
 	{
-		$beer = Beer::find($id);
+		$beer = Beer::with('userFrom')->with('userTo')->find($id);
 
 		if (!$beer) {
 			return Response::json(array(
