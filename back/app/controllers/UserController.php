@@ -9,7 +9,7 @@ class UserController extends \BaseController {
 	 */
 	public function index()
 	{
-		return Response::json(array(
+		return Response::customJson(array(
 		    'error' => true,
 		    'data' => 'You cannot access this!'
 		), 403);
@@ -49,7 +49,7 @@ class UserController extends \BaseController {
 		})->first();
 
 		if ($user) {
-			return Response::json(array(
+			return Response::customJson(array(
 			    'error' => true,
 			    'data' => 'User already exists!'
 			), 403);
@@ -60,10 +60,9 @@ class UserController extends \BaseController {
 		$user->username = $newUser['username'];
 		$user->password = Hash::make($newUser['password']);
 		$user->facebook_user_id = $newUser['facebook_user_id'];
-		$user->facebook_image = $newUser['facebook_image'];
 		$user->save();
 
-		return Response::json(array(
+		return Response::customJson(array(
 		    'error' => false,
 		    'data' => $user
 		), 200);
@@ -78,16 +77,16 @@ class UserController extends \BaseController {
 	 */
 	public function show($id)
 	{
-		$user = User::find($id);
+		$user = User::where('facebook_user_id', $id)->first();
 
 		if (!$user) {
-			return Response::json(array(
+			return Response::customJson(array(
 			    'error' => true,
 			    'data' => 'User not found!'
 			), 404);
 		}
 
-		return Response::json(array(
+		return Response::customJson(array(
 		    'error' => false,
 		    'data' => $user
 		), 200);
@@ -114,10 +113,10 @@ class UserController extends \BaseController {
 	 */
 	public function update($id)
 	{
-		$user = User::find($id);
+		$user = User::where('facebook_user_id', $id)->first();
 
 		if (!$user) {
-			return Response::json(array(
+			return Response::customJson(array(
 			    'error' => true,
 			    'data' => 'User not found!'
 			), 404);
@@ -127,7 +126,7 @@ class UserController extends \BaseController {
 
 		$authId = Auth::user()->id;
 		if ($user->id != authId || $user->facebook_image != $newUser['facebook_image']) {
-			return Response::json(array(
+			return Response::customJson(array(
 			    'error' => true,
 			    'data' => 'You cannot update this!'
 			), 403);
@@ -136,12 +135,11 @@ class UserController extends \BaseController {
 		$user->email = $newUser['email'];
 		$user->username = $newUser['username'];
 		$user->password = Hash::make($newUser['password']);
-		$user->facebook_image = $newUser['facebook_image'];
 		$user->save();
 
 		$user->delete();
  
-  		return Response::json(array(
+  		return Response::customJson(array(
         	'error' => false
   		), 200);
 	}
@@ -155,10 +153,10 @@ class UserController extends \BaseController {
 	 */
 	public function destroy($id)
 	{
-		$user = User::find($id);
+		$user = User::where('facebook_user_id', $id)->first();
 
 		if (!$user) {
-			return Response::json(array(
+			return Response::customJson(array(
 			    'error' => true,
 			    'data' => 'User not found!'
 			), 404);
@@ -166,7 +164,7 @@ class UserController extends \BaseController {
 
 		$authId = Auth::user()->id;
 		if ($user->id != authId) {
-			return Response::json(array(
+			return Response::customJson(array(
 			    'error' => true,
 			    'data' => 'You cannot delete this!'
 			), 403);
@@ -174,10 +172,27 @@ class UserController extends \BaseController {
 
 		$user->delete();
  
-  		return Response::json(array(
+  		return Response::customJson(array(
         	'error' => false
   		), 200);
 	}
 
+	public static function serializeCollection($users) {
+		$serializedArray = array();
+		foreach($users as $user) {
+		    $serializedArray[] = self::serializeobject($user);
+		};
 
+		return $serializedArray;
+	}
+
+	public static function serializeObject($user) {
+		$serializedUser = new stdClass();
+
+		$serializedUser->id = $user->facebook_user_id;
+		$serializedUser->name = $user->name;
+		$serializedUser->email = $user->email;
+
+		return $serializedUser;
+	}
 }

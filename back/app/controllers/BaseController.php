@@ -2,6 +2,17 @@
 
 class BaseController extends Controller {
 
+	protected $response;
+
+	function __construct() {
+		Response::macro(
+            'customJson',
+            function ($value, $code) {
+                return Response::json($value, $code, array('Access-Control-Allow-Origin' => '*'));
+            }
+        );
+	}
+
 	/**
 	 * Setup the layout used by the controller.
 	 *
