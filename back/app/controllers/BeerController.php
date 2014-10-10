@@ -9,9 +9,10 @@ class BeerController extends \BaseController {
 	 */
 	public function index()
 	{
+		$authId = Auth::user()->id;
 		$beers = Beer::where(function($query) {
-			$query->where('user_from_id', '=', Auth::user()->id)
-				  ->orWhere('user_to_id', '=', Auth::user()->id);
+			$query->where('user_from_id', '=', $authId)
+				  ->orWhere('user_to_id', '=', $authId);
 		})->get();
 
 		return Response::json(array(
@@ -41,11 +42,27 @@ class BeerController extends \BaseController {
 	{
 		$newBeer = Input::json()->all();
 
-		$beer = new Beer();
-		$beer->user_from_id = $newBeer['user_from_id'];
-		$beer->user_to_id = $newBeer['user_to_id'];
+		$authId = Auth::user()->id;
+		if ($newBeer['user_from_id'] != $authId) {
+			return Response::json(array(
+			    'error' => true,
+			    'data' => 'You cannot create this!'
+			), 403);
+		}
+
+		$beer = Beer::where(function($query) use ($newBeer) {
+			$query->where('user_from_id', '=', $newBeer['user_from_id'])
+				  ->where('user_to_id', '=', $newBeer['user_to_id']);
+		})->first();
+
+		if (!$beer) {
+			$beer = new Beer();
+			$beer->user_from_id = $newBeer['user_from_id'];
+			$beer->user_to_id = $newBeer['user_to_id'];
+		}
+
 		$beer->number = $newBeer['number'];
-		$beer->what = $newBeer['what'];
+		$beer->what = $beer->what+$newBeer['what'];
 		$beer->save();
 
 		return Response::json(array(
@@ -96,8 +113,14 @@ class BeerController extends \BaseController {
 
 		$beer = Beer::find($id);
 
-		//$beer->user_from_id = $newBeer['user_from_id'];
-		//$beer->user_to_id = $newBeer['user_to_id'];
+		$authId = Auth::user()->id;
+		if ($beer['user_from_id'] != authId && $beer['user_from_id'] != authId) {
+			return Response::json(array(
+			    'error' => true,
+			    'data' => 'You cannot touch this!'
+			), 403);
+		}
+
 		$beer->number = $newBeer['number'];
 		$beer->what = $newBeer['what'];
 		$beer->save();
