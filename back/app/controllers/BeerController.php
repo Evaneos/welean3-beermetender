@@ -15,9 +15,9 @@ class BeerController extends \BaseController {
 				  ->orWhere('user_to_id', '=', $authId);
 		})->get();
 
-		return Response::json(array(
+		return Response::customJson(array(
 		    'error' => false,
-		    'data' => $beers->toArray()
+		    'data' => self::serializeCollection($beers)
 		), 200);
 	}
 
@@ -43,8 +43,8 @@ class BeerController extends \BaseController {
 		$newBeer = Input::json()->all();
 
 		$authId = Auth::user()->id;
-		if ($newBeer['user_from_id'] != $authId) {
-			return Response::json(array(
+		if ($newBeer['user_from_id'] != $authId && $newBeer['user_to_id'] != $authId) {
+			return Response::customJson(array(
 			    'error' => true,
 			    'data' => 'You cannot create this!'
 			), 403);
@@ -62,10 +62,9 @@ class BeerController extends \BaseController {
 		}
 
 		$beer->number = $newBeer['number'];
-		$beer->what = $beer->what+$newBeer['what'];
 		$beer->save();
 
-		return Response::json(array(
+		return Response::customJson(array(
 		    'error' => false,
 		    'data' => $beer
 		), 200);
@@ -83,15 +82,15 @@ class BeerController extends \BaseController {
 		$beer = Beer::with('userFrom')->with('userTo')->find($id);
 
 		if (!$beer) {
-			return Response::json(array(
+			return Response::customJson(array(
 			    'error' => true,
 			    'data' => 'Beer not found!'
 			), 404);
 		}
 
-		return Response::json(array(
+		return Response::customJson(array(
 		    'error' => false,
-		    'data' => $beer
+		    'data' => self::serializeObject($beer)
 		), 200);
 	}
 
@@ -119,7 +118,7 @@ class BeerController extends \BaseController {
 		$beer = Beer::find($id);
 
 		if (!$beer) {
-			return Response::json(array(
+			return Response::customJson(array(
 			    'error' => true,
 			    'data' => 'Beer not found!'
 			), 404);
@@ -127,7 +126,7 @@ class BeerController extends \BaseController {
 
 		$authId = Auth::user()->id;
 		if ($beer->user_from_id != authId && $beer->user_to_id != authId) {
-			return Response::json(array(
+			return Response::customJson(array(
 			    'error' => true,
 			    'data' => 'You cannot touch this!'
 			), 403);
@@ -136,10 +135,9 @@ class BeerController extends \BaseController {
 		$newBeer = Input::json()->all();
 
 		$beer->number = $newBeer['number'];
-		$beer->what = $newBeer['what'];
 		$beer->save();
 
-		return Response::json(array(
+		return Response::customJson(array(
 		    'error' => false,
 		    'data' => $beer
 		), 200);
@@ -157,7 +155,7 @@ class BeerController extends \BaseController {
 		$beer = Beer::find($id);
 
 		if (!$beer) {
-			return Response::json(array(
+			return Response::customJson(array(
 			    'error' => true,
 			    'data' => 'Beer not found!'
 			), 404);
@@ -165,7 +163,7 @@ class BeerController extends \BaseController {
 
 		$authId = Auth::user()->id;
 		if ($beer->user_from_id != authId && $beer->user_to_id != authId) {
-			return Response::json(array(
+			return Response::customJson(array(
 			    'error' => true,
 			    'data' => 'You cannot delete this!'
 			), 403);
@@ -173,10 +171,34 @@ class BeerController extends \BaseController {
 
 		$beer->delete();
  
-  		return Response::json(array(
+  		return Response::customJson(array(
         	'error' => false
   		), 200);
 	}
 
+	public static function serializeCollection($beers) {
+		$serializedArray = array();
+		foreach($beers as $beer) {
+		    $serializedArray[] = self::serializeobject($beer);
+		};
 
+		return $serializedArray;
+	}
+
+	public static function serializeObject($beer) {
+		$serializedBeer = new stdClass();
+
+		$serializedBeer->id = $beer->id;
+
+		$authId = Auth::user()->id;
+		if ($beer->user_from_id == $authId) {
+			$serializedBeer->user = UserController::serializeObject($beer->userTo);
+			$serializedBeer->balance = 0-$beer->number;
+		} else {
+			$serializedBeer->user = UserController::serializeObject($beer->userFrom);
+			$serializedBeer->balance = $beer->number;
+		}
+
+		return $serializedBeer;
+	}
 }
