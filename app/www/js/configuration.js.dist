@@ -1,5 +1,8 @@
 angular.module('beermetender')
 	.constant('configuration', {
+		api: {
+			url: <URL>
+		},
 		facebook: {
 			appKey: <APP_KEY>,
 			version: <API_VERSION>

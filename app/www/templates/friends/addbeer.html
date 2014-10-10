@@ -1,0 +1,9 @@
+ <ion-modal-view>
+    <ion-header-bar>
+      <h1 class="title">Partager une bière avec {{ selectedFriend.name }}</h1>
+    </ion-header-bar>
+    <ion-content>
+      <input type="numeric" ng-model="balance" />
+      <button ng-click="createBeer(balance)">Valider</button>
+    </ion-content>
+  </ion-modal-view>

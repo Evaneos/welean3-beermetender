@@ -1,10 +1,10 @@
 <ion-content>
 	<ion-list class="list">
 		<ion-item ng-repeat="friend in friends">
-		  	<a class="item item-avatar" ui-sref="friend-view({id: friend.id})" >
+		  	<button class="item item-avatar button-full" ng-click="shareBeer(friend)" >
 		      <img ng-src="https://graph.facebook.com/{{friend.id}}/picture">
 		      <h2>{{ friend.name }}</h2>
-		    </a>
+		    </button>
 	  	</ion-item>
 	</ion-list>
 

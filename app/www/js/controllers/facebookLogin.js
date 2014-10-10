@@ -4,10 +4,9 @@ angular.module('beermetender')
 		$scope.login = function login() {
 
 			facebook.login().then(function() {
-				$state.go('friend-list');
+				$state.go('beer-list');
 			});
 
 		};
 
 	}]);
-

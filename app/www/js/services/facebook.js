@@ -9,11 +9,16 @@ angular.module('beermetender')
     		var permissions = ["public_profile", "email", "user_friends"];
     		var userID = null;
 
+            this.getUserID = function() {
+                return userID;
+            };
+
     		this.login = function() {
     			var defered = $q.defer();
 
     			facebookConnectPlugin.login(permissions,
     				function(response) {
+                        console.log(response);
     					userID = response.authResponse.userId;
     					defered.resolve(response);
     				},
