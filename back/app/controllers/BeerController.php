@@ -41,11 +41,11 @@ class BeerController extends \BaseController {
 	public function store()
 	{
 		$newBeer = Input::json()->all();
+		$authId = Auth::user()->id;
 
-		$userFrom = User::where('facebook_user_id', $newBeer['user_from_id'])->first();
+		$userFrom = User::find($authId);
 		$userTo = User::where('facebook_user_id', $newBeer['user_to_id'])->first();
 
-		$authId = Auth::user()->id;
 		if (!$userFrom || !$userTo || ($userFrom->id != $authId && $userTo->id != $authId)) {
 			return Response::customJson(array(
 			    'error' => true,
@@ -64,10 +64,10 @@ class BeerController extends \BaseController {
 		if (!$beer) {
 			$beer = new Beer();
 			$beer->user_from_id = $userFrom->id;
-			$beer->user_to_id = $$userTo->id;
+			$beer->user_to_id = $userTo->id;
 		}
 
-		$beer->number = $newBeer['number'];
+		$beer->number = $newBeer['balance'] ;
 		$beer->save();
 
 		return Response::customJson(array(
@@ -140,7 +140,9 @@ class BeerController extends \BaseController {
 
 		$newBeer = Input::json()->all();
 
-		$beer->number = $newBeer['number'];
+		$balance = $newBeer['balance'];
+
+		$beer->number = $balance;
 		$beer->save();
 
 		return Response::customJson(array(

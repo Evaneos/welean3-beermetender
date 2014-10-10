@@ -58,6 +58,7 @@ class UserController extends \BaseController {
 		$user = new User();
 		$user->email = $newUser['email'];
 		$user->username = $newUser['username'];
+		$user->name = $newUser['name'];
 		$user->password = Hash::make($newUser['password']);
 		$user->facebook_user_id = $newUser['facebook_user_id'];
 		$user->save();

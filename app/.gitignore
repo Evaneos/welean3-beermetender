@@ -1,2 +1,3 @@
 !.gitignore
-www/js/configuration.js
+/www/js/configuration.js
+*.log
