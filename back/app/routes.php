@@ -19,6 +19,8 @@ Route::get('/', function()
 // Groupe de routes pour le versioning d'API
 Route::group(array('prefix' => 'api/v1', 'before' => 'auth.basic'), function()
 {
-    Route::resource('users', 'UserController');
+    Route::resource('users', 'UserController', array('except' => 'store'));
     Route::resource('beers', 'BeerController');
 });
+
+Route::post('/api/v1/users', 'UserController@store');

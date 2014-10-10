@@ -82,6 +82,13 @@ class BeerController extends \BaseController {
 	{
 		$beer = Beer::find($id);
 
+		if (!$beer) {
+			return Response::json(array(
+			    'error' => true,
+			    'data' => 'Beer not found!'
+			), 404);
+		}
+
 		return Response::json(array(
 		    'error' => false,
 		    'data' => $beer
@@ -109,17 +116,24 @@ class BeerController extends \BaseController {
 	 */
 	public function update($id)
 	{
-		$newBeer = Input::json()->all();
-
 		$beer = Beer::find($id);
 
+		if (!$beer) {
+			return Response::json(array(
+			    'error' => true,
+			    'data' => 'Beer not found!'
+			), 404);
+		}
+
 		$authId = Auth::user()->id;
-		if ($beer['user_from_id'] != authId && $beer['user_from_id'] != authId) {
+		if ($beer->user_from_id != authId && $beer->user_to_id != authId) {
 			return Response::json(array(
 			    'error' => true,
 			    'data' => 'You cannot touch this!'
 			), 403);
 		}
+
+		$newBeer = Input::json()->all();
 
 		$beer->number = $newBeer['number'];
 		$beer->what = $newBeer['what'];
@@ -141,6 +155,21 @@ class BeerController extends \BaseController {
 	public function destroy($id)
 	{
 		$beer = Beer::find($id);
+
+		if (!$beer) {
+			return Response::json(array(
+			    'error' => true,
+			    'data' => 'Beer not found!'
+			), 404);
+		}
+
+		$authId = Auth::user()->id;
+		if ($beer->user_from_id != authId && $beer->user_to_id != authId) {
+			return Response::json(array(
+			    'error' => true,
+			    'data' => 'You cannot delete this!'
+			), 403);
+		}
 
 		$beer->delete();
  
