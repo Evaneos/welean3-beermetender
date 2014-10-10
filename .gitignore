@@ -1,0 +1,3 @@
+conf
+logs/*
+app/node_modules
