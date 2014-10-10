@@ -5,7 +5,7 @@
 // the 2nd parameter is an array of 'requires'
 angular.module('beermetender', ['ionic', 'ngResource'])
 
-.run(['$ionicPlatform', function($ionicPlatform) {
+.run(['$ionicPlatform', '$state', 'facebook', function($ionicPlatform, $state, facebook) {
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
@@ -15,6 +15,13 @@ angular.module('beermetender', ['ionic', 'ngResource'])
     if(window.StatusBar) {
       StatusBar.styleDefault();
     }
+
+    facebook.getLoginStatus().then(function(connection){
+        $state.go('beer-list');
+    },
+    function(connection){
+    });
+    
   });
 }])
 .config(['$stateProvider', '$urlRouterProvider', '$httpProvider', function($stateProvider, $urlRouterProvider, $httpProvider) {

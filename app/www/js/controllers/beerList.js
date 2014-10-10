@@ -17,6 +17,7 @@ angular.module('beermetender')
 
         $scope.saveBeer = function() {
            beerStorage.update($scope.selectedBeer);
+           $scope.modal.hide();
         };
 
         $scope.$on('$destroy', function() {

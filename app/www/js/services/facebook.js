@@ -13,14 +13,36 @@ angular.module('beermetender')
                 return userID;
             };
 
+            this.getLoginStatus = function() {
+                var defered = $q.defer();
+
+                facebookConnectPlugin.getLoginStatus(
+                    function(response) {
+                        if (response.status == 'connected') {
+                            userID = response.authResponse.userID;
+                            defered.resolve(response);
+                        } else {
+                            defered.reject(response);
+                        }
+                    },
+                    function(response) {
+                        defered.reject(response);
+                    });
+
+                return defered.promise;
+            };
+
     		this.login = function() {
     			var defered = $q.defer();
 
     			facebookConnectPlugin.login(permissions,
     				function(response) {
-                        console.log(response);
-    					userID = response.authResponse.userId;
-    					defered.resolve(response);
+    					if (response.status == 'connected') {
+                            userID = response.authResponse.userID;
+                            defered.resolve(response);
+                        } else {
+                            defered.reject(response);
+                        }
     				},
     				function(response) {
     					defered.reject(response);
@@ -28,6 +50,21 @@ angular.module('beermetender')
 
     			return defered.promise;
     		};
+
+            this.logout = function() {
+                var defered = $q.defer();
+
+                facebookConnectPlugin.logout(
+                    function(response) {
+                        userID = null;
+                        defered.resolve(response);
+                    },
+                    function(response) {
+                        defered.reject(response);
+                    });
+
+                return defered.promise;
+            };
 
     		this.getFriendList = function() {
 
