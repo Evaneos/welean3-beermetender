@@ -10,7 +10,7 @@ class BeerController extends \BaseController {
 	public function index()
 	{
 		$authId = Auth::user()->id;
-		$beers = Beer::where(function($query) {
+		$beers = Beer::where(function($query) use($authId) {
 			$query->where('user_from_id', '=', $authId)
 				  ->orWhere('user_to_id', '=', $authId);
 		})->get();
