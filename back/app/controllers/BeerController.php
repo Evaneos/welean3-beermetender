@@ -9,7 +9,15 @@ class BeerController extends \BaseController {
 	 */
 	public function index()
 	{
-		return 'Hello, Beer API';
+		$beers = Beer::where(function($query) {
+			$query->where('user_from_id', '=', Auth::user()->id)
+				  ->orWhere('user_to_id', '=', Auth::user()->id);
+		})->get();
+
+		return Response::json(array(
+		    'error' => false,
+		    'data' => $beers->toArray()
+		), 200);
 	}
 
 
@@ -31,7 +39,19 @@ class BeerController extends \BaseController {
 	 */
 	public function store()
 	{
-		//
+		$newBeer = Input::json()->all();
+
+		$beer = new Beer();
+		$beer->user_from_id = $newBeer['user_from_id'];
+		$beer->user_to_id = $newBeer['user_to_id'];
+		$beer->number = $newBeer['number'];
+		$beer->what = $newBeer['what'];
+		$beer->save();
+
+		return Response::json(array(
+		    'error' => false,
+		    'data' => $beer
+		), 200);
 	}
 
 
@@ -43,7 +63,12 @@ class BeerController extends \BaseController {
 	 */
 	public function show($id)
 	{
-		//
+		$beer = Beer::find($id);
+
+		return Response::json(array(
+		    'error' => false,
+		    'data' => $beer
+		), 200);
 	}
 
 
@@ -67,7 +92,20 @@ class BeerController extends \BaseController {
 	 */
 	public function update($id)
 	{
-		//
+		$newBeer = Input::json()->all();
+
+		$beer = Beer::find($id);
+
+		//$beer->user_from_id = $newBeer['user_from_id'];
+		//$beer->user_to_id = $newBeer['user_to_id'];
+		$beer->number = $newBeer['number'];
+		$beer->what = $newBeer['what'];
+		$beer->save();
+
+		return Response::json(array(
+		    'error' => false,
+		    'data' => $beer
+		), 200);
 	}
 
 
@@ -79,7 +117,13 @@ class BeerController extends \BaseController {
 	 */
 	public function destroy($id)
 	{
-		//
+		$beer = Beer::find($id);
+
+		$beer->delete();
+ 
+  		return Response::json(array(
+        	'error' => false
+  		), 200);
 	}
 
 

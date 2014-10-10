@@ -11,8 +11,8 @@ class DatabaseSeeder extends Seeder {
 	{
 		Eloquent::unguard();
  
-	    // Ajoutez ou décommentez cette ligne
 	    $this->call('UserTableSeeder');
+	    $this->call('BeerTableSeeder');
 	}
 
 }
