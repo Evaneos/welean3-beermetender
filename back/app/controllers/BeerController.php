@@ -42,23 +42,29 @@ class BeerController extends \BaseController {
 	{
 		$newBeer = Input::json()->all();
 
+		$userFrom = User::where('facebook_user_id', $newBeer['user_from_id'])->first();
+		$userTo = User::where('facebook_user_id', $newBeer['user_to_id'])->first();
+
 		$authId = Auth::user()->id;
-		if ($newBeer['user_from_id'] != $authId && $newBeer['user_to_id'] != $authId) {
+		if (!$userFrom || !$userTo || ($userFrom->id != $authId && $userTo->id != $authId)) {
 			return Response::customJson(array(
 			    'error' => true,
 			    'data' => 'You cannot create this!'
 			), 403);
 		}
 
-		$beer = Beer::where(function($query) use ($newBeer) {
-			$query->where('user_from_id', '=', $newBeer['user_from_id'])
-				  ->where('user_to_id', '=', $newBeer['user_to_id']);
+		$beer = Beer::where(function($query) use ($newBeer, $userFrom, $userTo) {
+			$query->where('user_from_id', '=', $userFrom->id)
+				  ->where('user_to_id', '=', $userTo->id);
+		})->orWhere(function($query) use ($newBeer, $userFrom, $userTo) {
+			$query->where('user_from_id', '=', $userTo->id)
+				  ->where('user_to_id', '=', $userFrom->id);
 		})->first();
 
 		if (!$beer) {
 			$beer = new Beer();
-			$beer->user_from_id = $newBeer['user_from_id'];
-			$beer->user_to_id = $newBeer['user_to_id'];
+			$beer->user_from_id = $userFrom->id;
+			$beer->user_to_id = $$userTo->id;
 		}
 
 		$beer->number = $newBeer['number'];
@@ -125,7 +131,7 @@ class BeerController extends \BaseController {
 		}
 
 		$authId = Auth::user()->id;
-		if ($beer->user_from_id != authId && $beer->user_to_id != authId) {
+		if ($beer->user_from_id != $authId && $beer->user_to_id != $authId) {
 			return Response::customJson(array(
 			    'error' => true,
 			    'data' => 'You cannot touch this!'
@@ -162,7 +168,7 @@ class BeerController extends \BaseController {
 		}
 
 		$authId = Auth::user()->id;
-		if ($beer->user_from_id != authId && $beer->user_to_id != authId) {
+		if ($beer->user_from_id != $authId && $beer->user_to_id != $authId) {
 			return Response::customJson(array(
 			    'error' => true,
 			    'data' => 'You cannot delete this!'
