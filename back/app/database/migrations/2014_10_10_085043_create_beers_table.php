@@ -18,7 +18,7 @@ class CreateBeersTable extends Migration {
 	        $table->integer('user_from_id');
 	        $table->integer('user_to_id');
 	        $table->integer('number');
-	        $table->string('what');
+	        $table->string('what')->nullable();
 	        $table->timestamps();
 		});
 	}
