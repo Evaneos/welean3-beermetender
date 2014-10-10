@@ -5,7 +5,7 @@
 // the 2nd parameter is an array of 'requires'
 angular.module('beermetender', ['ionic'])
 
-.run(function($ionicPlatform) {
+.run(['$ionicPlatform', function($ionicPlatform) {
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
@@ -16,4 +16,25 @@ angular.module('beermetender', ['ionic'])
       StatusBar.styleDefault();
     }
   });
-})
+}])
+.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
+
+  $stateProvider
+    .state('facebook-connect', {
+      url: '/',
+      templateUrl: 'templates/facebook/connect.html',
+      controller: 'facebookLoginCtrl'
+    })
+    .state('friend-list', {
+      url: '/friends',
+      templateUrl: 'templates/friends/list.html',
+      controller: 'friendListCtrl',
+      resolve: {
+        friends: ['$q','facebook', function($q, facebook) {
+          return facebook.getFriendList();
+        }]
+      }
+    });
+
+  $urlRouterProvider.otherwise("/");
+}]);
