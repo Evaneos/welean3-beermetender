@@ -17,7 +17,7 @@ class BeerController extends \BaseController {
 
 		return Response::json(array(
 		    'error' => false,
-		    'data' => $beers->toArray()
+		    'data' => $this->serializeCollection($beers)
 		), 200);
 	}
 
@@ -62,7 +62,6 @@ class BeerController extends \BaseController {
 		}
 
 		$beer->number = $newBeer['number'];
-		$beer->what = $beer->what+$newBeer['what'];
 		$beer->save();
 
 		return Response::json(array(
@@ -91,7 +90,7 @@ class BeerController extends \BaseController {
 
 		return Response::json(array(
 		    'error' => false,
-		    'data' => $beer
+		    'data' => $this->serializeObject($beer)
 		), 200);
 	}
 
@@ -136,7 +135,6 @@ class BeerController extends \BaseController {
 		$newBeer = Input::json()->all();
 
 		$beer->number = $newBeer['number'];
-		$beer->what = $newBeer['what'];
 		$beer->save();
 
 		return Response::json(array(
@@ -178,5 +176,29 @@ class BeerController extends \BaseController {
   		), 200);
 	}
 
+	protected function serializeCollection($beers) {
+		$serializedArray = array();
+		foreach($beers as $beer) {
+		    $serializedArray[] = $this->serializeobject($beer);
+		};
 
+		return $serializedArray;
+	}
+
+	protected function serializeObject($beer) {
+		$serializedBeer = new stdClass();
+
+		$serializedBeer->id = $beer->id;
+
+		$authId = Auth::user()->id;
+		if ($beer->user_from_id == $authId) {
+			$serializedBeer->user = $beer->userTo;
+			$serializedBeer->balance = $beer->number;
+		} else {
+			$serializedBeer->user = $beer->userFrom;
+			$serializedBeer->balance = $beer->number;
+		}
+
+		return $serializedBeer;
+	}
 }
