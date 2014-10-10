@@ -15,3 +15,10 @@ Route::get('/', function()
 {
 	return View::make('hello');
 });
+
+// Groupe de routes pour le versioning d'API
+Route::group(array('prefix' => 'api/v1'), function()
+{
+    Route::resource('users', 'UserController');
+    Route::resource('beers', 'BeerController');
+});
