@@ -1,5 +1,5 @@
 angular.module('beermetender')
-	.service('facebook', ['$window', '$q', 'configuration', function($window, $q, configuration) {
+	.service('facebook', ['$window', '$q', '$http', 'configuration', function($window, $q, $http, configuration) {
 
 		if(!$window.cordova) {
       		facebookConnectPlugin.browserInit(configuration.facebook.appKey, configuration.facebook.version);
@@ -30,9 +30,7 @@ angular.module('beermetender')
 
     			facebookConnectPlugin.api('/me/friends', permissions,
     				function(response) {
-    					var newResponse = response.data;
-
-    					defered.resolve(newResponse);
+    					defered.resolve(transformFbResponse(response));
     				},
     				function(response) {
     					defered.reject(response);
@@ -40,6 +38,25 @@ angular.module('beermetender')
 
     			return defered.promise;
     		};
+    	}
+
+    	function transformFbResponse(response) {
+    		var newResponse = response.data;
+
+    		if(response.paging && response.paging.next) {
+    			newResponse.getNext = function() {
+    				var defered = $q.defer();
+
+    				$http.get(response.paging.next).success(function(data) {
+    					defered.resolve(transformFbResponse(data));
+    				});
+
+    				return defered.promise;
+    			};
+    			
+    		}
+
+    		return newResponse;
     	}
 
 		return new Facebook();

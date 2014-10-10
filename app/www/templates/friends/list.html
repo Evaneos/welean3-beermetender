@@ -1,7 +1,16 @@
-<div class="list">
+<ion-content>
+	<ion-list class="list">
+		<ion-item ng-repeat="friend in friends">
+		  	<a class="item item-avatar" ui-sref="friend-view({id: friend.id})" >
+		      <img ng-src="https://graph.facebook.com/{{friend.id}}/picture">
+		      <h2>{{ friend.name }}</h2>
+		    </a>
+	  	</ion-item>
+	</ion-list>
 
-    <a class="item item-avatar" ui-sref="friend-view({id: friend.id})" ng-repeat="friend in friends">
-      <h2>{{ friend.name }}</h2>
-    </a>
-
-</div>
+	<ion-infinite-scroll
+		ng-if="getNextBatchOfFriends"
+		on-infinite="loadMore()"
+		distance="1%">
+	</ion-infinite-scroll>
+</ion-content>
