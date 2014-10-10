@@ -26,7 +26,7 @@ return array(
 	|
 	*/
 
-	'default' => 'mysql',
+	'default' => 'pgsql',
 
 	/*
 	|--------------------------------------------------------------------------
@@ -64,11 +64,11 @@ return array(
 		),
 
 		'pgsql' => array(
-			'driver'   => 'pgsql',
-			'host'     => 'localhost',
-			'database' => 'forge',
-			'username' => 'forge',
-			'password' => '',
+			'driver'    => 'pgsql',
+			'host'      => '172.16.103.129',
+			'database'  => 'beermetender',
+			'username'  => 'postgres',
+			'password'  => 'postgres',
 			'charset'  => 'utf8',
 			'prefix'   => '',
 			'schema'   => 'public',
