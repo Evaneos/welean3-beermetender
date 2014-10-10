@@ -125,7 +125,7 @@ class UserController extends \BaseController {
 		$newUser = Input::json()->all();
 
 		$authId = Auth::user()->id;
-		if ($user->id != authId || $user->facebook_image != $newUser['facebook_image']) {
+		if ($user->id != $authId || $user->facebook_image != $newUser['facebook_image']) {
 			return Response::customJson(array(
 			    'error' => true,
 			    'data' => 'You cannot update this!'
@@ -163,7 +163,7 @@ class UserController extends \BaseController {
 		}
 
 		$authId = Auth::user()->id;
-		if ($user->id != authId) {
+		if ($user->id != $authId) {
 			return Response::customJson(array(
 			    'error' => true,
 			    'data' => 'You cannot delete this!'

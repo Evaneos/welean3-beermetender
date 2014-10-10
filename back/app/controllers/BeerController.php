@@ -131,7 +131,7 @@ class BeerController extends \BaseController {
 		}
 
 		$authId = Auth::user()->id;
-		if ($beer->user_from_id != authId && $beer->user_to_id != authId) {
+		if ($beer->user_from_id != $authId && $beer->user_to_id != $authId) {
 			return Response::customJson(array(
 			    'error' => true,
 			    'data' => 'You cannot touch this!'
@@ -168,7 +168,7 @@ class BeerController extends \BaseController {
 		}
 
 		$authId = Auth::user()->id;
-		if ($beer->user_from_id != authId && $beer->user_to_id != authId) {
+		if ($beer->user_from_id != $authId && $beer->user_to_id != $authId) {
 			return Response::customJson(array(
 			    'error' => true,
 			    'data' => 'You cannot delete this!'
