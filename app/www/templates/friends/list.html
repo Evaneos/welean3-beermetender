@@ -1,4 +1,4 @@
-<ion-pane>
+<ion-content class="pane">
 	<ion-list class="list">
 		<ion-item ng-repeat="friend in friends">
 		  	<button class="item item-avatar button-full" ng-click="shareBeer(friend)" >
@@ -7,10 +7,10 @@
 		      <span class="badge badge-assertive">{{ friend.beer.balance || 0 }}</span>
 		    </button>
 	  	</ion-item>
-	  	<ion-infinite-scroll
+	</ion-list>
+	<ion-infinite-scroll
 			ng-if="getNextBatchOfFriends"
 			on-infinite="loadMore()"
 			distance="1%">
-		</ion-infinite-scroll>
-	</ion-list>
-<ion-pane>
+	</ion-infinite-scroll>
+</ion-content>
