@@ -92,7 +92,7 @@ angular.module('beermetender')
 
     	function transformFbResponse(response) {
     		var newResponse = response.data;
-
+            
     		if(response.paging && response.paging.next) {
     			newResponse.getNext = function() {
     				var defered = $q.defer();

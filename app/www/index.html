@@ -32,7 +32,12 @@
   </head>
   <body ng-app="beermetender">
 
-    <ion-nav-view></ion-nav-view>
+    <ion-header-bar align-title="center" ng-controller="MenuCtrl">
+          <h1 class="title">Beer me tender</h1>
+          <button class="button button-icon icon ion-log-out" ng-click="logout()" ng-show="isLoggedIn"></button>
+    </ion-header-bar>
+
+    <ion-nav-view class="has-header"></ion-nav-view>
 
     <script src="//connect.facebook.net/en_US/sdk.js"></script>
     <script src="lib/phonegap/facebookConnectPlugin/facebookConnectPlugin.js"></script>
