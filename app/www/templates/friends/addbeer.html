@@ -3,8 +3,12 @@
       <h1 class="title">Partager une bière avec {{ selectedFriend.name }}</h1>
     </ion-header-bar>
     <ion-content>
-      <button ng-click="oweYouBeer(1)">Owe you</button>
-      <button ng-click="oweYouBeer(-1)">Owes me</button>
-      <button ng-click="closeModal()">Close</button>
+    	<div class="row">
+      		<button class="button button-stable col" ng-click="oweYouBeer(1)">I owe {{ selectedFriend.name }} a beer</button>
+      		<button class="button button-stable col" ng-click="oweYouBeer(-1)">{{ selectedFriend.name }} owes me</button>
+      	</div>
+      	<div class="row">
+      		<button class="button button-small button-assertive col col-center" ng-click="closeModal()">Close</button>
+      	</div>
     </ion-content>
   </ion-modal-view>
