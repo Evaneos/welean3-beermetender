@@ -39,7 +39,7 @@ class FacebookLoginController extends \BaseController {
 				$user = new User();
 				$user->name = $name;
 				$user->username = $facebook_id;
-				$user->password = Hash::make(rand());
+				$user->password = Hash::make(rand().'password');
 				$user->email = $email;
 				$user->facebook_user_id = $facebook_id;
 				$user->save();
