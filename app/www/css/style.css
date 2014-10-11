@@ -1,1 +1,7 @@
 /* Empty. Add your own CSS if you like */
+
+h1 {
+	font-family: 'Carter One', cursive;
+    font-weight: 300;
+    color: #73451E;
+}
