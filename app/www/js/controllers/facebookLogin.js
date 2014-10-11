@@ -1,7 +1,7 @@
 angular.module('beermetender')
-	.controller('facebookLoginCtrl', ['$scope', '$ionicModal', '$state', 'facebook', function($scope, $ionicModal, $state, facebook) {
+	.controller('facebookLoginCtrl', ['$scope', '$ionicModal', '$state', 'facebook', 'authentication', function($scope, $ionicModal, $state, facebook, authentication) {
 
-		$scope.userID = facebook.getUserID();
+		$scope.userID = facebook.getUserID;
 
 		$ionicModal.fromTemplateUrl('templates/facebook/failure.html', {
             scope: $scope,
@@ -14,7 +14,9 @@ angular.module('beermetender')
 
 			facebook.login().then(
 				function(connection) {
-					$state.go('beer-list');
+					authentication.authenticate().then(function() {
+						$state.go('beer-list');
+					});
 				},
 				function(connection) {
 					$scope.modal.show();

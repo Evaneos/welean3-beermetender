@@ -1,9 +1,9 @@
 angular.module('beermetender')
-	.service('Beers', ['$resource', 'facebook', function($resource, facebook) {
+	.service('Beers', ['$resource', 'facebook', 'authentication', function($resource, facebook, authentication) {
 	
 		function Beers() {
 
-			var res = $resource('http://www.beer-me-tender.local/api/v1/beers/:beerId', {beerId:'@id'}, {query: {method: 'GET'}, 'update': { method:'PUT' }});
+			var res = $resource('http://www.beer-me-tender.local/api/v1/beers/:beerId', {beerId:'@id', token: authentication.getToken()}, {query: {method: 'GET'}, 'update': { method:'PUT' }});
 
 			this.getList = function() {
 				return res.query().$promise;

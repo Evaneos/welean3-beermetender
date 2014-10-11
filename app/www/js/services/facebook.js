@@ -8,9 +8,14 @@ angular.module('beermetender')
     	function Facebook() {
     		var permissions = ["public_profile", "email", "user_friends"];
     		var userID = null;
+            var accessToken = null;
 
             this.getUserID = function() {
                 return userID;
+            };
+
+            this.getAccessToken = function() {
+                return accessToken;
             };
 
             this.getLoginStatus = function() {
@@ -20,6 +25,7 @@ angular.module('beermetender')
                     function(response) {
                         if (response.status == 'connected') {
                             userID = response.authResponse.userID;
+                            accessToken = response.authResponse.accessToken;
                             defered.resolve(response);
                         } else {
                             defered.reject(response);
@@ -39,6 +45,7 @@ angular.module('beermetender')
     				function(response) {
     					if (response.status == 'connected') {
                             userID = response.authResponse.userID;
+                            accessToken = response.authResponse.accessToken;
                             defered.resolve(response);
                         } else {
                             defered.reject(response);
@@ -57,6 +64,7 @@ angular.module('beermetender')
                 facebookConnectPlugin.logout(
                     function(response) {
                         userID = null;
+                        accessToken = null;
                         defered.resolve(response);
                     },
                     function(response) {

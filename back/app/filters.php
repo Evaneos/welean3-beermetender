@@ -49,6 +49,23 @@ Route::filter('auth', function()
 });
 
 
+Route::filter('auth.rest.token', function()
+{
+    $token = Input::get('token');
+	$session = RestSession::where('token', $token)->first();
+	$user = null;
+
+	if ($session) {
+		$user = User::find($session->user_id);
+	}
+	
+	if (!$user) {
+		App::abort(400, "Invalid token");
+	} else {
+		Auth::login($user);
+	}
+});
+
 Route::filter('auth.basic', function()
 {
     return Auth::basic("username");
