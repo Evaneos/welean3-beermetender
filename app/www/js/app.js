@@ -34,18 +34,6 @@ angular.module('beermetender', ['ionic', 'ngResource'])
       templateUrl: 'templates/facebook/connect.html',
       controller: 'facebookLoginCtrl'
     })
-    .state('beer-list', {
-      url: '/beers',
-      templateUrl: 'templates/beers/list.html',
-      controller: 'beerListCtrl',
-      resolve: {
-        beers: ['Beers', function(beers) {
-          return beers.getList().then(function(response) {
-            return response.data;
-          });
-        }]
-      }
-    })
     .state('friend-list', {
       url: '/friends',
       templateUrl: 'templates/friends/list.html',
@@ -53,6 +41,11 @@ angular.module('beermetender', ['ionic', 'ngResource'])
       resolve: {
         friends: ['facebook', function(facebook) {
           return facebook.getFriendList();
+        }],
+        beers: ['Beers', function(beers) {
+          return beers.getList().then(function(response) {
+            return response.data;
+          });
         }]
       }
     });

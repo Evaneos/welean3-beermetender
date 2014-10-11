@@ -15,7 +15,7 @@ angular.module('beermetender')
 			facebook.login().then(
 				function(connection) {
 					authentication.authenticate().then(function() {
-						$state.go('beer-list');
+						$state.go('friend-list');
 					});
 				},
 				function(connection) {
