@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+    <title></title>
+
+    <link href="lib/ionic/css/ionic.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+    <link href="http://fonts.googleapis.com/css?family=Carter+One" rel="stylesheet" type="text/css">
+
+    <!-- IF using Sass (run gulp sass first), then uncomment below and remove the CSS includes above
+    <link href="css/ionic.app.css" rel="stylesheet">
+    -->
+
+    <!-- ionic/angularjs js -->
+    <script src="lib/ionic/js/ionic.bundle.js"></script>
+    <script src="lib/ionic/js/angular/angular-resource.js"></script>
+
+    <!-- cordova script (this will be a 404 during development) -->
+    <script src="cordova.js"></script>
+
+    <!-- your app's js -->
+    <script src="js/app.js"></script>
+    <script src="js/configuration.js"></script>
+    <script src="js/services/facebook.js"></script>
+    <script src="js/services/authentication.js"></script>
+    <script src="js/controllers/facebookLogin.js"></script>
+    <script src="js/controllers/friendList.js"></script>
+    <script src="js/controllers/menu.js"></script>
+    <script src="js/models/beers.js"></script>
+  </head>
+  <body ng-app="beermetender" class="platform-ios platform-cordova platform-webview">
+
+    <ion-header-bar align-title="center" ng-controller="MenuCtrl">
+          <h1 class="title">Beer me tender</h1>
+          <button class="button button-icon icon ion-log-out" ng-click="logout()" ng-show="isLoggedIn"></button>
+    </ion-header-bar>
+
+    <ion-nav-view class="has-header"></ion-nav-view>
+
+    <script src="//connect.facebook.net/en_US/sdk.js"></script>
+    <script src="lib/phonegap/facebookConnectPlugin/facebookConnectPlugin.js"></script>
+  </body>
+</html>
