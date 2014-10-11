@@ -57,6 +57,7 @@ angular.module('beermetender')
             } else {
                 beerStorage.create($scope.selectedFriend.beer);
             }
+            $scope.modal.hide();
         }
 
         $scope.closeModal = function() {
