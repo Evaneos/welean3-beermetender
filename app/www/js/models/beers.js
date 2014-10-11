@@ -9,15 +9,17 @@ angular.module('beermetender')
 				return res.query().$promise;
 			};
 
-			this.shareWithUser = function(user)
+			this.create = function(beer)
 			{
-				var res = $resource('http://www.beer-me-tender.local/api/v1/beers/:beerId', {beerId:'@id', token: authentication.getToken()}, {query: {method: 'GET'}, 'update': { method:'PUT' }});
+				var res = $resource('http://www.beer-me-tender.local/api/v1/beers/:beerId', {token: authentication.getToken()}, {query: {method: 'GET'}, 'update': { method:'PUT' }});
 
 				var beer = new res({
 					user_from_id: facebook.getUserID(),
-					user_to_id: user.id,
-					balance: user.beer.balance
+					user_to_id: beer.user.id,
+					balance: beer.balance
 				});
+
+				console.log(beer);
 				
 				return beer.$save();
 			};

@@ -1,5 +1,5 @@
 angular.module('beermetender')
-	.controller('friendListCtrl', ['$scope', '$ionicModal', 'Beers', 'friends', 'beers', function($scope, $ionicModal, beerStorage, friends, beers) {
+	.controller('friendListCtrl', ['$scope', '$ionicModal', 'Beers', 'friends', 'beers', 'facebook', function($scope, $ionicModal, beerStorage, friends, beers, facebook) {
 
         $scope.getNextBatchOfFriends = friends.getNext;
         $scope.friends = friends;
@@ -38,14 +38,31 @@ angular.module('beermetender')
             $scope.modal.show();
         };
 
-        $scope.goGoGadgetAuBiere = function() {
-            if($scope.selectedFriend.beer && $scope.selectedFriend.beer.id) {
+        $scope.oweYouBeer = function(number) {
+            if (!$scope.selectedFriend.beer) {
+                $scope.selectedFriend.beer = {
+                    user : { id : $scope.selectedFriend.id },
+                    balance: 0
+                };
+            }
+
+            if ($scope.selectedFriend.beer.user.id != facebook.getUserID()) {
+                $scope.selectedFriend.beer.balance += number;
+            } else {
+                $scope.selectedFriend.beer.balance -= number;
+            }
+
+            if ($scope.selectedFriend.beer.id) {
                 beerStorage.update($scope.selectedFriend.beer);
+            } else {
+                beerStorage.create($scope.selectedFriend.beer);
             }
-            else {
-                beerStorage.shareWithUser($scope.selectedFriend);
-            }
-        };
+            $scope.modal.hide();
+        }
+
+        $scope.closeModal = function() {
+            $scope.modal.hide();
+        }
 
         $scope.$on('$destroy', function onDestroyFriendListCtrl() {
             $scope.modal.remove();

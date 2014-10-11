@@ -3,7 +3,8 @@
       <h1 class="title">Partager une bière avec {{ selectedFriend.name }}</h1>
     </ion-header-bar>
     <ion-content>
-      <input type="numeric" ng-model="selectedFriend.beer.balance" />
-      <button ng-click="goGoGadgetAuBiere()">Valider</button>
+      <button ng-click="oweYouBeer(1)">Owe you</button>
+      <button ng-click="oweYouBeer(-1)">Owes me</button>
+      <button ng-click="closeModal()">Close</button>
     </ion-content>
   </ion-modal-view>
