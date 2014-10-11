@@ -201,11 +201,10 @@ class BeerController extends \BaseController {
 		$authId = Auth::user()->id;
 		if ($beer->user_from_id == $authId) {
 			$serializedBeer->user = UserController::serializeObject($beer->userTo);
-			$serializedBeer->balance = 0-$beer->number;
 		} else {
 			$serializedBeer->user = UserController::serializeObject($beer->userFrom);
-			$serializedBeer->balance = $beer->number;
 		}
+		$serializedBeer->balance = $beer->number;
 
 		return $serializedBeer;
 	}
