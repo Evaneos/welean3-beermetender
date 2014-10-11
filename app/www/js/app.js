@@ -22,6 +22,7 @@ angular.module('beermetender', ['ionic', 'ngResource'])
       });
     },
     function(connection){
+        $state.go('facebook-connect');
     });
 
   });
@@ -30,7 +31,7 @@ angular.module('beermetender', ['ionic', 'ngResource'])
 
   $stateProvider
     .state('facebook-connect', {
-      url: '/',
+      url: '/facebook-connect',
       templateUrl: 'templates/facebook/connect.html',
       controller: 'facebookLoginCtrl'
     })
