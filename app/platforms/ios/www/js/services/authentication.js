@@ -1,9 +1,9 @@
 angular.module('beermetender')
-	.service('authentication', ['$resource', '$http', 'facebook', function($resource, $http, facebook) {
+	.service('authentication', ['$resource', '$http', 'facebook', 'configuration', function($resource, $http, facebook, configuration) {
 	
 		function Authentication() {
 
-			var res = $resource('http://www.beer-me-tender.local/api/v1/authenticate', {}, {post: {method: 'POST'}});
+			var res = $resource(configuration.api.url+'/api/v1/authenticate', {}, {post: {method: 'POST'}});
 
 			var token = null;
 

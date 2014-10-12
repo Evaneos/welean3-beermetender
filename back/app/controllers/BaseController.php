@@ -12,7 +12,7 @@ class BaseController extends Controller {
                 	$value,
                 	$code,
                 	array(
-                		'Access-Control-Allow-Origin' => 'http://www.beer-me-tender.local:8100',
+                		'Access-Control-Allow-Origin' => Config::get('app.cors.origin'),
                 		'Access-Control-Allow-Credentials' => 'true'
                 	)
                 );
