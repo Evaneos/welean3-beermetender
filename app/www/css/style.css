@@ -3,5 +3,18 @@
 h1 {
 	font-family: 'Carter One', cursive;
     font-weight: 300;
-    color: #73451E;
+    color: #fff;
+    text-shadow: 3px 2px 0px rgba(115, 69, 30, 0.8);
+}
+
+.pane, .list, .bar-header {
+	background: #EED9BB;
+}
+
+.bar-header {
+	background: #CD432F;
+}
+
+.icon.icon-big:before {
+	font-size: 50px;
 }

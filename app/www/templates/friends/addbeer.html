@@ -4,8 +4,16 @@
     </ion-header-bar>
     <ion-content>
     	<div class="row padding-vertical">
-      		<button class="button button-stable col" ng-click="oweYouBeer(1)">I owe {{ selectedFriend.name }} a beer</button>
-      		<button class="button button-stable col" ng-click="oweYouBeer(-1)">{{ selectedFriend.name }} owes me a beer</button>
+      		<button class="button button-stable col" ng-click="oweYouBeer(1)">
+            <div class="row">
+              <span class="icon ion-thumbsup col energized icon-big"></span>
+            </div>
+            I owe {{ selectedFriend.name }} a beer</button>
+      		<button class="button button-stable col" ng-click="oweYouBeer(-1)">
+            <div class="row">
+              <span class="icon ion-thumbsdown col energized icon-big"></span>
+            </div>
+            {{ selectedFriend.name }} owes me a beer</button>
       	</div>
       	<div class="row">
       		<button class="button button-small button-assertive col col-center" ng-click="closeModal()">Close</button>
