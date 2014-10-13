@@ -1,0 +1,16 @@
+<ion-content class="pane">
+	<ion-list class="list">
+		<ion-item ng-repeat="friend in friends">
+		  	<button class="item item-avatar button-full" ng-click="shareBeer(friend)" >
+		      <img ng-src="https://graph.facebook.com/{{friend.id}}/picture">
+		      <h2>{{ friend.name }}</h2>
+		      <span class="badge badge-assertive">{{ friend.beer.balance || 0 }}</span>
+		    </button>
+	  	</ion-item>
+	</ion-list>
+	<ion-infinite-scroll
+			ng-if="getNextBatchOfFriends"
+			on-infinite="loadMore()"
+			distance="1%">
+	</ion-infinite-scroll>
+</ion-content>

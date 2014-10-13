@@ -192,8 +192,12 @@ return array(
 	),
 
 	'facebook_app' => array(
-		'id' 	 => '<>'
+		'id' 	 => '<>',
 		'secret' => '<>'
+	),
+
+	'cors' => array(
+		'origin' => ''
 	),
 
 );
